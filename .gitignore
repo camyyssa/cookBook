@@ -22,3 +22,12 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# editor settings
+.vscode/
+
+# claude code
+.claude/
+
+# pnpm workspace config (single-package project)
+pnpm-workspace.yaml
