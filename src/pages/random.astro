@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import placeholder from '../assets/images/placeholder.svg';
 
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const recipes = await getCollection('recipes');
 const allDishes = recipes.map((r) => ({
   id: r.id,
