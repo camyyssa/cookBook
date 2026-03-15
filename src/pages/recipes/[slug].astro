@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import placeholder from '../../assets/images/placeholder.svg';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes');
+  return recipes.map((recipe) => ({
+    params: { slug: recipe.id },
+    props: { recipe },
+  }));
+}
+
+const { recipe } = Astro.props;
+const { data } = recipe;
+const { Content } = await render(recipe);
+---
+
+<Layout title={data.title}>
+  <article class="recipe">
+    <div class="recipe-hero">
+      <Image src={data.image ?? placeholder} alt={data.title} width={900} height={500} />
+    </div>
+
+    <h1>{data.title}</h1>
+    <p class="description">{data.description}</p>
+
+    {(data.servings || data.prepTime || data.cookTime) && (
+      <div class="meta">
+        {data.servings && <span>Serves {data.servings}</span>}
+        {data.prepTime && <span>Prep: {data.prepTime}</span>}
+        {data.cookTime && <span>Cook: {data.cookTime}</span>}
+      </div>
+    )}
+
+    {data.tags.length > 0 && (
+      <div class="tags">
+        {data.tags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    <section class="ingredients">
+      <h2>Ingredients</h2>
+      <ul>
+        {data.ingredients.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="steps">
+      <h2>Steps</h2>
+      <Content />
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .recipe {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .recipe-hero {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .recipe-hero img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+  }
+
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    color: var(--color-muted);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .tags {
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .ingredients ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .ingredients li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .steps :global(ol) {
+    padding-left: 1.5rem;
+  }
+
+  .steps :global(li) {
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+  }
+</style>

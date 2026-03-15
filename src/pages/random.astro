@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import placeholder from '../assets/images/placeholder.svg';
+
+const base = import.meta.env.BASE_URL;
+const recipes = await getCollection('recipes');
+const allDishes = recipes.map((r) => ({
+  id: r.id,
+  title: r.data.title,
+  image: r.data.image,
+  description: r.data.description,
+  href: `${base}recipes/${r.id}/`,
+}));
+---
+
+<Layout title="Surprise me">
+  <div class="random-page">
+    <h1>Can't decide?</h1>
+    <p class="subtitle">Here are some picks for you.</p>
+
+    <div class="picks photo-grid" id="picks">
+      {allDishes.map((dish) => (
+        <div class="card pick-card" data-id={dish.id}>
+          <a href={dish.href}>
+            <Image src={dish.image ?? placeholder} alt={dish.title} width={560} height={440} />
+            <div class="card-body">
+              <h3>{dish.title}</h3>
+              <p>{dish.description}</p>
+            </div>
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <button id="shuffle-btn" class="shuffle-btn">Show me different dishes</button>
+  </div>
+</Layout>
+
+<script>
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.pick-card'));
+  const btn = document.getElementById('shuffle-btn')!;
+  const VISIBLE_COUNT = 3;
+
+  function shuffle() {
+    // Fisher-Yates shuffle of indices
+    const indices = cards.map((_, i) => i);
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    const visible = new Set(indices.slice(0, Math.min(VISIBLE_COUNT, cards.length)));
+    cards.forEach((card, i) => {
+      card.style.display = visible.has(i) ? '' : 'none';
+    });
+  }
+
+  shuffle();
+  btn.addEventListener('click', shuffle);
+</script>
+
+<style>
+  .random-page {
+    text-align: center;
+  }
+
+  .random-page h1 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+  }
+
+  .shuffle-btn {
+    margin-top: 2rem;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .shuffle-btn:hover {
+    background: #a84830;
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+const recipes = await getCollection('recipes');
+---
+
+<Layout title="Recipes">
+  <h1 class="page-title">Recipes</h1>
+  <div class="photo-grid">
+    {recipes.map((recipe) => (
+      <RecipeCard
+        title={recipe.data.title}
+        image={recipe.data.image}
+        href={`${base}recipes/${recipe.id}/`}
+        description={recipe.data.description}
+        tags={recipe.data.tags}
+      />
+    ))}
+  </div>
+</Layout>

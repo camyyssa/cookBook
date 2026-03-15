@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import placeholder from '../assets/images/placeholder.svg';
+
+interface Props {
+  title: string;
+  image?: ImageMetadata;
+  href: string;
+  description?: string;
+  tags?: string[];
+}
+
+const { title, image, href, description, tags = [] } = Astro.props;
+const src = image ?? placeholder;
+---
+
+<div class="card">
+  <a href={href}>
+    <Image src={src} alt={title} width={560} height={440} />
+    <div class="card-body">
+      <h3>{title}</h3>
+      {description && <p>{description}</p>}
+      {tags.length > 0 && (
+        <div>
+          {tags.map((tag) => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  </a>
+</div>

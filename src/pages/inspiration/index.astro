@@ -1,0 +1,30 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RecipeCard from '../../components/RecipeCard.astro';
+import { getCollection } from 'astro:content';
+
+const inspiration = await getCollection('inspiration');
+---
+
+<Layout title="Inspiration">
+  <h1 class="page-title">Inspiration</h1>
+  <p class="subtitle">Simple ideas for days when you don't need a full recipe.</p>
+  <div class="photo-grid">
+    {inspiration.map((item) => (
+      <RecipeCard
+        title={item.data.title}
+        image={item.data.image}
+        href="#"
+        tags={item.data.tags}
+      />
+    ))}
+  </div>
+</Layout>
+
+<style>
+  .subtitle {
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+    margin-top: -1rem;
+  }
+</style>
