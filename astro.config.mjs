@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://camyyssa.github.io',
-  base: '/cookBook',
+  site: 'https://food.owl.si',
+  base: '/',
   output: 'static',
 });
