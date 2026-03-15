@@ -1,6 +1,7 @@
 ---
 title: Salată de vinete
 description: Salată de vinete la aburi, la Thermomix.
+image: ../../assets/images/salata-de-vinete.png
 ingredients:
   - 2 vinete
   - 500 g apă

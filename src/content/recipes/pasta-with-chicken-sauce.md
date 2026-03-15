@@ -1,6 +1,7 @@
 ---
 title: Pasta with Chicken Sauce
 description: Creamy lemon chicken pasta with garlic. No onions.
+image: ../../assets/images/pasta-with-chicken-sauce.png
 prepTime: 10 min
 cookTime: 20 min
 ingredients:

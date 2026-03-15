@@ -1,6 +1,7 @@
 ---
 title: Potato Broccoli Curry
 description: Cremiges Curry mit Kartoffeln, Brokkoli und roten Linsen in Kokosmilch.
+image: ../../assets/images/potato-broccoli-curry.png
 servings: 4
 prepTime: 15 min
 cookTime: 20 min

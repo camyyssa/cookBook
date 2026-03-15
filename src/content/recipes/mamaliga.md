@@ -1,6 +1,7 @@
 ---
 title: Mămăligă
 description: Mămăligă simplă la Thermomix.
+image: ../../assets/images/mamaliga.png
 servings: 4
 ingredients:
   - 500 g apă

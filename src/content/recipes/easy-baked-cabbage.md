@@ -1,6 +1,7 @@
 ---
 title: Easy Baked Cabbage
 description: Thick cabbage wedges roasted at high heat until caramelised.
+image: ../../assets/images/easy-baked-cabbage.png
 prepTime: 5 min
 cookTime: 20 min
 ingredients:
