@@ -16,6 +16,8 @@ tags:
   - pasta
   - chicken
   - quick
+  - main
+rating: 5
 ---
 
 1. Cook the pasta in salted boiling water until al dente. Reserve some pasta water before draining.

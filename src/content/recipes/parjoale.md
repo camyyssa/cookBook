@@ -14,6 +14,8 @@ ingredients:
 tags:
   - romanian
   - meat
+  - main
+rating: 5
 ---
 
 1. Rade cartofii și morcovii, stoarce bine sucul din ei.

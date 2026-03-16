@@ -8,25 +8,48 @@ interface Props {
   href: string;
   description?: string;
   tags?: string[];
+  rating?: number;
+  category?: string;
 }
 
-const { title, image, href, description, tags = [] } = Astro.props;
+const { title, image, href, description, tags = [], rating, category } = Astro.props;
 const src = image ?? placeholder;
+const stars = rating ? '★'.repeat(rating) + '☆'.repeat(5 - rating) : null;
 ---
 
-<div class="card">
+<div class="card" data-category={category}>
   <a href={href}>
     <Image src={src} alt={title} width={560} height={440} />
     <div class="card-body">
       <h3>{title}</h3>
       {description && <p>{description}</p>}
-      {tags.length > 0 && (
-        <div>
-          {tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
+      <div class="card-footer">
+        {tags.length > 0 && (
+          <div>
+            {tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        )}
+        {stars && <span class="rating">{stars}</span>}
+      </div>
     </div>
   </a>
 </div>
+
+<style>
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .rating {
+    color: #c45d3e;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+</style>

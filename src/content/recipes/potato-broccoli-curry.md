@@ -19,6 +19,7 @@ tags:
   - curry
   - vegan
   - healthy
+  - main
 ---
 
 1. Kartoffeln waschen, schälen und würfeln. Brokkoli putzen, waschen und in Röschen teilen. Zwiebeln abziehen und fein würfeln.

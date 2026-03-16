@@ -10,7 +10,7 @@ ingredients:
 tags:
   - romanian
   - thermomix
-  - side
+  - staple
 ---
 
 1. Pune 500 g apă în vasul Thermomix. Fierbe 5 min 30 sec, 90°C, viteza 1.

@@ -13,6 +13,8 @@ const allItems = [
     image: r.data.image,
     description: r.data.description,
     tags: r.data.tags,
+    rating: r.data.rating,
+    category: r.data.tags.find((t) => ['main', 'side', 'staple'].includes(t)),
     href: `${base}recipes/${r.id}/`,
   })),
   ...inspiration.map((i) => ({
@@ -21,6 +23,8 @@ const allItems = [
     image: i.data.image,
     description: undefined,
     tags: i.data.tags,
+    rating: undefined,
+    category: undefined,
     href: `${base}inspiration/`,
   })),
 ];
@@ -32,7 +36,7 @@ const allItems = [
     <p>Browse recipes, get inspired, or <a href={`${base}random/`}>let fate decide</a>.</p>
   </section>
 
-  <div class="photo-grid">
+  <div class="photo-grid" id="home-grid">
     {allItems.map((item) => (
       <RecipeCard
         title={item.title}
@@ -40,10 +44,22 @@ const allItems = [
         href={item.href}
         description={item.description}
         tags={item.tags}
+        rating={item.rating}
+        category={item.category}
       />
     ))}
   </div>
 </Layout>
+
+<script>
+  const grid = document.getElementById('home-grid')!;
+  const cards = Array.from(grid.children);
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    grid.appendChild(cards[j]);
+    cards.splice(j, 1);
+  }
+</script>
 
 <style>
   .hero {

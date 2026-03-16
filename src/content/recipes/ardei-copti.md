@@ -17,6 +17,7 @@ ingredients:
 tags:
   - romanian
   - vegetables
+  - side
 ---
 
 1. Curăță ardeii copți, taie-le cotoarele și porționează-i în fâșii.

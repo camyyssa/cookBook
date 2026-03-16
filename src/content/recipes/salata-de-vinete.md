@@ -15,6 +15,8 @@ tags:
   - romanian
   - thermomix
   - salad
+  - side
+rating: 5
 ---
 
 1. Pune 500 ml apă în Thermomix. Taie vinetele în ronduri de 2-3 cm și pune-le în vasele Varoma. Gătește la aburi 30 min, Varoma, viteza 1.

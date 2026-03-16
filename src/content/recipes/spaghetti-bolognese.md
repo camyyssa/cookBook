@@ -15,6 +15,8 @@ tags:
   - pasta
   - thermomix
   - meat
+  - main
+rating: 5
 ---
 
 1. Pune ceapa și uleiul în Thermomix. Toacă 3 sec, viteza 5.

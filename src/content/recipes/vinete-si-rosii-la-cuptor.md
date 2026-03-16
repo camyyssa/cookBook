@@ -11,6 +11,7 @@ tags:
   - romanian
   - vegetables
   - oven
+  - side
 ---
 
 1. Toacă vinetele cubulețe și căleşte-le într-o tigaie cu puțin ulei și unt.

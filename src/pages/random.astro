@@ -12,6 +12,7 @@ const allDishes = recipes.map((r) => ({
   image: r.data.image,
   description: r.data.description,
   href: `${base}recipes/${r.id}/`,
+  isMain: r.data.tags.includes('main'),
 }));
 ---
 
@@ -22,7 +23,7 @@ const allDishes = recipes.map((r) => ({
 
     <div class="picks photo-grid" id="picks">
       {allDishes.map((dish) => (
-        <div class="card pick-card" data-id={dish.id}>
+        <div class="card pick-card" data-id={dish.id} data-main={dish.isMain ? 'true' : 'false'}>
           <a href={dish.href}>
             <Image src={dish.image ?? placeholder} alt={dish.title} width={560} height={440} />
             <div class="card-body">
@@ -43,17 +44,27 @@ const allDishes = recipes.map((r) => ({
   const btn = document.getElementById('shuffle-btn')!;
   const VISIBLE_COUNT = 3;
 
+  function pickRandom<T>(arr: T[]): T {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   function shuffle() {
-    // Fisher-Yates shuffle of indices
-    const indices = cards.map((_, i) => i);
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
+    const mains = cards.filter((c) => c.dataset.main === 'true');
+    const others = cards.filter((c) => c.dataset.main !== 'true');
+
+    const picked = new Set<HTMLElement>();
+
+    // Always include one main
+    if (mains.length > 0) picked.add(pickRandom(mains));
+
+    // Fill remaining slots from all remaining cards
+    const remaining = cards.filter((c) => !picked.has(c));
+    while (picked.size < Math.min(VISIBLE_COUNT, cards.length)) {
+      picked.add(pickRandom(remaining.filter((c) => !picked.has(c))));
     }
 
-    const visible = new Set(indices.slice(0, Math.min(VISIBLE_COUNT, cards.length)));
-    cards.forEach((card, i) => {
-      card.style.display = visible.has(i) ? '' : 'none';
+    cards.forEach((card) => {
+      card.style.display = picked.has(card) ? '' : 'none';
     });
   }
 

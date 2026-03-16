@@ -12,6 +12,7 @@ tags:
   - vegetables
   - simple
   - vegan
+  - side
 ---
 
 1. Preheat oven to 275°C.
