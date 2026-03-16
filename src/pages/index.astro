@@ -16,6 +16,7 @@ const allItems = [
     rating: r.data.rating,
     category: r.data.tags.find((t) => ['main', 'side', 'filler'].includes(t)),
     href: `${base}recipes/${r.id}/`,
+    searchText: [r.data.title, ...r.data.tags, ...r.data.ingredients].join(' ').toLowerCase(),
   })),
   ...inspiration.map((i) => ({
     id: i.id,
@@ -26,6 +27,7 @@ const allItems = [
     rating: undefined,
     category: undefined,
     href: `${base}inspiration/`,
+    searchText: [i.data.title, ...i.data.tags].join(' ').toLowerCase(),
   })),
 ];
 ---
@@ -36,35 +38,64 @@ const allItems = [
     <p>Browse recipes, get inspired, or <a href={`${base}random/`}>let fate decide</a>.</p>
   </section>
 
+  <div class="search-bar">
+    <input
+      type="search"
+      id="search"
+      placeholder="Search by title, ingredient or tag…"
+      autocomplete="off"
+    />
+  </div>
+
+  <p id="no-results" hidden>No recipes found.</p>
+
   <div class="photo-grid" id="home-grid">
     {allItems.map((item) => (
-      <RecipeCard
-        title={item.title}
-        image={item.image}
-        href={item.href}
-        description={item.description}
-        tags={item.tags}
-        rating={item.rating}
-        category={item.category}
-      />
+      <div class="grid-item" data-search={item.searchText}>
+        <RecipeCard
+          title={item.title}
+          image={item.image}
+          href={item.href}
+          description={item.description}
+          tags={item.tags}
+          rating={item.rating}
+          category={item.category}
+        />
+      </div>
     ))}
   </div>
 </Layout>
 
 <script>
+  // Shuffle on load
   const grid = document.getElementById('home-grid')!;
-  const cards = Array.from(grid.children);
-  for (let i = cards.length - 1; i > 0; i--) {
+  const items = Array.from(grid.children) as HTMLElement[];
+  for (let i = items.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    grid.appendChild(cards[j]);
-    cards.splice(j, 1);
+    grid.appendChild(items[j]);
+    items.splice(j, 1);
   }
+
+  // Search
+  const input = document.getElementById('search') as HTMLInputElement;
+  const noResults = document.getElementById('no-results')!;
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll<HTMLElement>('.grid-item').forEach((item) => {
+      const match = !query || item.dataset.search!.includes(query);
+      item.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    noResults.hidden = visible > 0;
+  });
 </script>
 
 <style>
   .hero {
     text-align: center;
-    padding: 2rem 0 3rem;
+    padding: 2rem 0 2rem;
   }
 
   .hero h1 {
@@ -75,5 +106,32 @@ const allItems = [
   .hero p {
     color: var(--color-muted);
     font-size: 1.1rem;
+  }
+
+  .search-bar {
+    margin-bottom: 2rem;
+  }
+
+  #search {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    font-family: var(--font-body);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: var(--color-card-bg);
+    color: var(--color-text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #search:focus {
+    border-color: var(--color-accent);
+  }
+
+  #no-results {
+    text-align: center;
+    color: var(--color-muted);
+    padding: 2rem 0;
   }
 </style>
