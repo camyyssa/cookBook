@@ -4,6 +4,7 @@ import RecipeCard from '../components/RecipeCard.astro';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const normalize = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const recipes = await getCollection('recipes');
 const inspiration = await getCollection('inspiration');
 const allItems = [
@@ -16,7 +17,7 @@ const allItems = [
     rating: r.data.rating,
     category: r.data.tags.find((t) => ['main', 'side', 'filler'].includes(t)),
     href: `${base}recipes/${r.id}/`,
-    searchText: [r.data.title, ...r.data.tags, ...r.data.ingredients].join(' ').toLowerCase(),
+    searchText: normalize([r.data.title, ...r.data.tags, ...r.data.ingredients].join(' ')),
   })),
   ...inspiration.map((i) => ({
     id: i.id,
@@ -27,7 +28,7 @@ const allItems = [
     rating: undefined,
     category: undefined,
     href: `${base}inspiration/`,
-    searchText: [i.data.title, ...i.data.tags].join(' ').toLowerCase(),
+    searchText: normalize([i.data.title, ...i.data.tags].join(' ')),
   })),
 ];
 ---
@@ -81,7 +82,7 @@ const allItems = [
   const noResults = document.getElementById('no-results')!;
 
   input.addEventListener('input', () => {
-    const query = input.value.trim().toLowerCase();
+    const query = input.value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     let visible = 0;
     document.querySelectorAll<HTMLElement>('.grid-item').forEach((item) => {
       const match = !query || item.dataset.search!.includes(query);
