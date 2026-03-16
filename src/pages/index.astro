@@ -14,7 +14,7 @@ const allItems = [
     description: r.data.description,
     tags: r.data.tags,
     rating: r.data.rating,
-    category: r.data.tags.find((t) => ['main', 'side', 'staple'].includes(t)),
+    category: r.data.tags.find((t) => ['main', 'side', 'filler'].includes(t)),
     href: `${base}recipes/${r.id}/`,
   })),
   ...inspiration.map((i) => ({
