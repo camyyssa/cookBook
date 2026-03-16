@@ -1,20 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
+import RecipeCard from '../components/RecipeCard.astro';
 import { getCollection } from 'astro:content';
-import placeholder from '../assets/images/placeholder.svg';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const recipes = await getCollection('recipes');
-const allDishes = recipes.map((r) => ({
-  id: r.id,
-  title: r.data.title,
-  image: r.data.image,
-  description: r.data.description,
-  href: `${base}recipes/${r.id}/`,
-  isMain: r.data.tags.includes('main'),
-  isFiller: r.data.tags.includes('filler'),
-}));
+const allDishes = recipes
+  .filter((r) => !r.data.tags.includes('filler'))
+  .map((r) => ({
+    id: r.id,
+    title: r.data.title,
+    image: r.data.image,
+    description: r.data.description,
+    tags: r.data.tags,
+    rating: r.data.rating,
+    category: r.data.tags.find((t) => ['main', 'side'].includes(t)),
+    href: `${base}recipes/${r.id}/`,
+    isMain: r.data.tags.includes('main'),
+  }));
 ---
 
 <Layout title="Surprise me">
@@ -24,14 +27,16 @@ const allDishes = recipes.map((r) => ({
 
     <div class="picks photo-grid" id="picks">
       {allDishes.map((dish) => (
-        <div class="card pick-card" data-id={dish.id} data-main={dish.isMain ? 'true' : 'false'} data-filler={dish.isFiller ? 'true' : 'false'}>
-          <a href={dish.href}>
-            <Image src={dish.image ?? placeholder} alt={dish.title} width={560} height={440} />
-            <div class="card-body">
-              <h3>{dish.title}</h3>
-              <p>{dish.description}</p>
-            </div>
-          </a>
+        <div class="pick-item" data-id={dish.id} data-main={dish.isMain ? 'true' : 'false'}>
+          <RecipeCard
+            title={dish.title}
+            image={dish.image}
+            href={dish.href}
+            description={dish.description}
+            tags={dish.tags}
+            rating={dish.rating}
+            category={dish.category}
+          />
         </div>
       ))}
     </div>
@@ -41,9 +46,7 @@ const allDishes = recipes.map((r) => ({
 </Layout>
 
 <script>
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.pick-card')).filter(
-    (c) => c.dataset.filler !== 'true'
-  );
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.pick-item'));
   const btn = document.getElementById('shuffle-btn')!;
   const VISIBLE_COUNT = 3;
 
@@ -52,22 +55,18 @@ const allDishes = recipes.map((r) => ({
   }
 
   function shuffle() {
-    const mains = cards.filter((c) => c.dataset.main === 'true');
-    const others = cards.filter((c) => c.dataset.main !== 'true');
-
+    const mains = items.filter((c) => c.dataset.main === 'true');
     const picked = new Set<HTMLElement>();
 
-    // Always include one main
     if (mains.length > 0) picked.add(pickRandom(mains));
 
-    // Fill remaining slots from all remaining cards
-    const remaining = cards.filter((c) => !picked.has(c));
-    while (picked.size < Math.min(VISIBLE_COUNT, cards.length)) {
+    const remaining = items.filter((c) => !picked.has(c));
+    while (picked.size < Math.min(VISIBLE_COUNT, items.length)) {
       picked.add(pickRandom(remaining.filter((c) => !picked.has(c))));
     }
 
-    cards.forEach((card) => {
-      card.style.display = picked.has(card) ? '' : 'none';
+    items.forEach((item) => {
+      item.style.display = picked.has(item) ? '' : 'none';
     });
   }
 
