@@ -1,6 +1,7 @@
 ---
 title: Spaghetti Bolognese
 description: Bolognese clasic la Thermomix.
+image: ../../assets/images/spaghetti-bolognese.png
 ingredients:
   - 150 g ceapă
   - 15 g ulei
