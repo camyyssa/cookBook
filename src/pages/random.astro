@@ -13,6 +13,7 @@ const allDishes = recipes.map((r) => ({
   description: r.data.description,
   href: `${base}recipes/${r.id}/`,
   isMain: r.data.tags.includes('main'),
+  isFiller: r.data.tags.includes('filler'),
 }));
 ---
 
@@ -23,7 +24,7 @@ const allDishes = recipes.map((r) => ({
 
     <div class="picks photo-grid" id="picks">
       {allDishes.map((dish) => (
-        <div class="card pick-card" data-id={dish.id} data-main={dish.isMain ? 'true' : 'false'}>
+        <div class="card pick-card" data-id={dish.id} data-main={dish.isMain ? 'true' : 'false'} data-filler={dish.isFiller ? 'true' : 'false'}>
           <a href={dish.href}>
             <Image src={dish.image ?? placeholder} alt={dish.title} width={560} height={440} />
             <div class="card-body">
@@ -40,7 +41,9 @@ const allDishes = recipes.map((r) => ({
 </Layout>
 
 <script>
-  const cards = Array.from(document.querySelectorAll<HTMLElement>('.pick-card'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.pick-card')).filter(
+    (c) => c.dataset.filler !== 'true'
+  );
   const btn = document.getElementById('shuffle-btn')!;
   const VISIBLE_COUNT = 3;
 
